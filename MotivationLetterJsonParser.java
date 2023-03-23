@@ -3,10 +3,14 @@ import java.util.stream.Collectors;
 
 public class MotivationLetterJsonParser {
 
-    private static final String ORIGINAL_PATH = "letters.txt";
+    private static final String LETTERS_PATH = "letters.txt";
     private static final String RESULT_PATH = "applications/";
 
     public static void main(String[] args) throws IOException {
+        if (new File(RESULT_PATH).mkdirs()) {
+            System.out.println("[MotivationLetterJsonParser] Created folder \"applications\"");
+        }
+        System.out.println("[MotivationLetterJsonParser] Parsing applications...");
         String rawText = read();
         StringBuilder textCombined = new StringBuilder("[");
         int applicationNumber = 0;
@@ -35,11 +39,12 @@ public class MotivationLetterJsonParser {
         textCombined.append(']');
         fileCombined.write(textCombined.toString());
         fileCombined.close();
+        System.out.println("[MotivationLetterJsonParser] Success");
     }
 
     static String read() {
         String result;
-        try (InputStream is = new FileInputStream(ORIGINAL_PATH)) {
+        try (InputStream is = new FileInputStream(LETTERS_PATH)) {
             try (InputStreamReader isr = new InputStreamReader(is); BufferedReader br = new BufferedReader(isr)) {
                 result = br.lines().collect(Collectors.joining("\n"));
             }
